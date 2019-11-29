@@ -1,25 +1,36 @@
 import { Action } from "@ngrx/store";
 
 export enum ActionTypes {
-  LoadDataBegin = "[Data] Load data begin",
-  LoadDataSuccess = "[Data] Load data success",
-  LoadDataFailure = "[Data] Load data failure"
+	LoadCarBegin = "[Car] Load car begin",
+	LoadCarSuccess = "[Car] Load car success",
+	AddCar = "[Car] Add",
+	UpdateCar = "[Car] Update",
+	DeleteCar = "[Car] Delete"
 }
 
-export class LoadDataBegin implements Action {
-  readonly type = ActionTypes.LoadDataBegin;
+export class LoadCarBegin implements Action {
+	readonly type = ActionTypes.LoadCarBegin;
 }
 
-export class LoadDataSuccess implements Action {
-  readonly type = ActionTypes.LoadDataSuccess;
+export class LoadCarSuccess implements Action {
+	readonly type = ActionTypes.LoadCarSuccess;
 
-  constructor(public payload: { data: any }) {}
+	constructor(public payload) { }
 }
 
-export class LoadDataFailure implements Action {
-  readonly type = ActionTypes.LoadDataFailure;
-
-  constructor(public payload: { error: any }) {}
+export class AddCar implements Action {
+	readonly type = ActionTypes.AddCar;
+	constructor(public payload) { }
 }
 
-export type ActionsUnion = LoadDataBegin | LoadDataSuccess | LoadDataFailure;
+export class UpdateCar implements Action {
+	readonly type = ActionTypes.UpdateCar;
+	constructor(public payload, public selectedCar){}
+}
+
+export class DeleteCar implements Action {
+	readonly type = ActionTypes.DeleteCar;
+	constructor(public payload) {}
+}
+
+export type ActionsUnion = LoadCarBegin | LoadCarSuccess | AddCar | UpdateCar | DeleteCar;

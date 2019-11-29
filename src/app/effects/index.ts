@@ -1,3 +1,3 @@
-import { DataEffects } from "./appeffects";
+import { CarEffects } from "./appeffects";
 
-export const effects: any[] = [DataEffects];
+export const effects: any[] = [CarEffects];

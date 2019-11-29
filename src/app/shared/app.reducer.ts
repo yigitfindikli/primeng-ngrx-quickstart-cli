@@ -1,50 +1,72 @@
-import * as fromData from "./app.action";
+import * as fromCar from "./app.action";
+import { Car } from '../models/car';
 
-export interface DataState {
-  items: string[];
-  loading: boolean;
-  error: any;
+export interface CarState {
+	cars: Car[];
+	loading: boolean;
 }
 
-export const initialState: DataState = {
-  items: [],
-  loading: false,
-  error: null
+export const initialState: CarState = {
+	cars: [],
+	loading: false
 };
 
 export function reducer(
-  state = initialState,
-  action: fromData.ActionsUnion
-): DataState {
-  switch (action.type) {
-    case fromData.ActionTypes.LoadDataBegin: {
-      return {
-        ...state,
-        loading: true,
-        error: null
-      };
-    }
+	state = initialState,
+	action: fromCar.ActionsUnion
+): CarState {
+	switch (action.type) {
+		case fromCar.ActionTypes.LoadCarBegin: {
+			return {
+				...state,
+				loading: true,
+			};
+		}
 
-    case fromData.ActionTypes.LoadDataSuccess: {
-      return {
-        ...state,
-        loading: false,
-        items: action.payload.data
-      };
-    }
+		case fromCar.ActionTypes.LoadCarSuccess: {
+			return {
+				...state,
+				loading: false,
+				cars: action.payload.data
+			};
+		}
 
-    case fromData.ActionTypes.LoadDataFailure: {
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.error
-      };
-    }
+		case fromCar.ActionTypes.AddCar: {
+			const items = state.cars;
+			items.push(action.payload);
+			return {
+				...state,
+				cars: items
+			}
+		}
 
-    default: {
-      return state;
-    }
-  }
+		case fromCar.ActionTypes.UpdateCar: {
+			const index = findSelectedCarIndex(state.cars, action.selectedCar);
+			const cars = state.cars;
+			cars[index] = action.payload;
+			return {
+				...state,
+				cars:cars
+			}
+		}
+
+		case fromCar.ActionTypes.DeleteCar: {
+			const index = findSelectedCarIndex(state.cars ,action.payload);
+			const cars = state.cars.filter((val, i) => i !== index);
+			return {
+				...state,
+				cars:cars
+			}
+		}
+
+		default: {
+			return state;
+		}
+	}
 }
 
-export const getItems = (state: DataState) => state.items;
+function findSelectedCarIndex(cars,selectedCar): number {
+	return cars.indexOf(selectedCar);
+}
+
+export const getItems = (state: CarState) => state.cars;

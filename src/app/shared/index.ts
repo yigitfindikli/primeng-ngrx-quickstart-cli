@@ -7,22 +7,18 @@ import {
 } from "@ngrx/store";
 import { environment } from "../../environments/environment";
 
-import * as fromData from "./app.reducer";
+import * as fromCar from "./app.reducer";
 
 export interface AppState {
-    data: fromData.DataState;
+    data: fromCar.CarState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-    data: fromData.reducer
+    data: fromCar.reducer
 };
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production
     ? []
     : [];
 
-export const getDataState = (state: AppState) => state.data;
-export const getAllItems = createSelector(
-    getDataState,
-    fromData.getItems
-);
+export const getCarState = (state: AppState) => state.data;

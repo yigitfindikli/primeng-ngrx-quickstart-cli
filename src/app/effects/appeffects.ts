@@ -1,24 +1,20 @@
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { map, switchMap, catchError } from "rxjs/operators";
-import { of } from "rxjs";
 
-import { DataService } from "../services/dataservice";
-import * as DataActions from "../shared/app.action";
+import { CarService } from "../services/carservice";
+import * as CarActions from "../shared/app.action";
 
 @Injectable()
-export class DataEffects {
-  constructor(private actions: Actions, private dataService: DataService) {}
+export class CarEffects {
+  constructor(private actions: Actions, private carService: CarService) {}
 
   @Effect()
-  loadData = this.actions.pipe(
-    ofType(DataActions.ActionTypes.LoadDataBegin),
+  loadCars = this.actions.pipe(
+    ofType(CarActions.ActionTypes.LoadCarBegin),
     switchMap(() => {
-      return this.dataService.loadData().pipe(
-        map(data => new DataActions.LoadDataSuccess({ data: data })),
-        catchError(error =>
-          of(new DataActions.LoadDataFailure({ error: error }))
-        )
+      return this.carService.loadCars().pipe(
+        map(data => new CarActions.LoadCarSuccess(data))
       );
     })
   );

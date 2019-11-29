@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from './services/dataservice';
+import { Car } from './models/car';
+import { Observable } from 'rxjs';
+import { CarService } from './services/carservice';
+
+export class PrimeCar implements Car {
+    constructor(public vin?, public year?, public brand?, public color?) {}
+}
 
 @Component({
 	selector: 'app-root',
@@ -7,15 +13,64 @@ import { DataService } from './services/dataservice';
 	styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-	title = 'primeng-ngrx-quickstart-cli';
 
-	constructor(private dataService: DataService) {
-		this.dataService.load();
+	constructor(private carService: CarService) {
+		this.carService.load();
 	}
 
 	ngOnInit() {
-		this.dataService.getData().subscribe(data => {
-			console.log(data);
+		this.carService.getCars().subscribe(data => {
+			const cars = [...data.cars];
+			this.cars = cars;
 		})
+	}
+
+
+	cars: Car[];
+
+	cols = [
+		{ field: 'vin', header: 'Vin' },
+		{ field: 'year', header: 'Year' },
+		{ field: 'brand', header: 'Brand' },
+		{ field: 'color', header: 'Color' }
+	];
+
+	selectedCar: Car;
+
+	newCar: boolean;
+
+	displayDialog: boolean;
+
+	car: Car = new PrimeCar();
+
+	showDialogToAdd() {
+		this.newCar = true;
+		this.car = new PrimeCar();
+		this.displayDialog = true;
+	}
+
+	onRowSelect(event) {
+		this.newCar = false;
+		this.car = { ...event.data };
+		this.displayDialog = true;
+	}
+
+	delete() {
+		if (this.selectedCar)
+			this.carService.deleteCar(this.selectedCar);
+		this.car = null;
+		this.displayDialog = false;
+	}
+
+	save() {
+		if (this.newCar) {
+			this.carService.addCar(this.car);
+		}
+		else {
+			this.carService.updateCar(this.car, this.selectedCar);
+		}
+
+		this.car = null;
+		this.displayDialog = false;
 	}
 }
