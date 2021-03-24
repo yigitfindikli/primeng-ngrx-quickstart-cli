@@ -32,7 +32,7 @@ export function reducer(
 		}
 
 		case fromCar.ActionTypes.AddCar: {
-			const items = state.cars;
+			let items =[...state.cars];
 			items.push(action.payload);
 			return {
 				...state,
@@ -41,8 +41,8 @@ export function reducer(
 		}
 
 		case fromCar.ActionTypes.UpdateCar: {
-			const index = findSelectedCarIndex(state.cars, action.selectedCar);
-			const cars = state.cars;
+			let index = findSelectedCarIndex(state.cars, action.selectedCar);
+			let cars = [...state.cars];
 			cars[index] = action.payload;
 			return {
 				...state,
